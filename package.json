@@ -1,0 +1,27 @@
+{
+  "name": "intelligensc",
+  "version": "1.0.0",
+  "description": "IntelligenSC is a full-stack SaaS tool that scrapes the Chrome Web Store, enriches extension metadata with keyword and traffic insights via DataForSEO, and visualizes it in a modern dashboard for developers, marketers, and analysts.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.11.1",
+    "cors": "^2.8.5",
+    "dotenv": "^17.0.1",
+    "express": "^5.1.0",
+    "prisma": "^6.11.1",
+    "puppeteer": "^24.11.2"
+  }
+}
