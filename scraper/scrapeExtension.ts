@@ -1,9 +1,6 @@
 import puppeteer from 'puppeteer';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
-
-type ExtensionData = {
+export type ExtensionData = {
   name: string;
   description: string;
   installs: number;
@@ -12,7 +9,13 @@ type ExtensionData = {
   keywords: string[];
 };
 
-async function scrapeExtension(url: string): Promise<{ id: string; data: ExtensionData } | null> {
+/**
+ * Scrape one Chrome Web Store extension page for metadata.
+ * Returns { id, data } or null on failure.
+ */
+export async function scrapeExtensionData(
+  url: string
+): Promise<{ id: string; data: ExtensionData } | null> {
   const browser = await puppeteer.launch({
     headless: true,
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
@@ -55,13 +58,13 @@ async function scrapeExtension(url: string): Promise<{ id: string; data: Extensi
       return { name, description, installs, rating, category, keywords };
     });
 
-    await browser.close();
-
     if (!data.name) {
       console.warn('Missing name — likely a selector or DOM issue.');
+      await browser.close();
       return null;
     }
 
+    await browser.close();
     return { id: extensionId, data };
   } catch (error) {
     console.error('Scrape error:', error);
@@ -69,28 +72,3 @@ async function scrapeExtension(url: string): Promise<{ id: string; data: Extensi
     return null;
   }
 }
-
-async function main() {
-  const extensionUrl = 'https://chrome.google.com/webstore/detail/grammarly-for-chrome/kbfnbcaeplbcioakkpcpgfkobkghlhen';
-
-  console.log(`Scraping extension from ${extensionUrl}...`);
-  const scraped = await scrapeExtension(extensionUrl);
-
-  if (scraped) {
-    const { id, data } = scraped;
-
-    const saved = await prisma.extension.upsert({
-      where: { id },
-      update: { ...data, updatedAt: new Date() },
-      create: { id, ...data, updatedAt: new Date() },
-    });
-
-    console.log('✅ Saved extension to DB:', saved);
-  } else {
-    console.log('❌ Failed to scrape extension data.');
-  }
-
-  await prisma.$disconnect();
-}
-
-main();

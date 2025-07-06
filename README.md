@@ -1,168 +1,158 @@
 # IntelligenSC
 
-🧠 IntelligenSC is a full-stack SaaS tool that scrapes the Chrome Web Store, enriches extension metadata with keyword and traffic insights via DataForSEO, and visualizes it in a modern dashboard for developers, marketers, and analysts.
+🧠 **IntelligenSC** is a full-stack SaaS intelligence platform that scrapes the Chrome Web Store, enriches extension metadata with keyword and traffic insights via DataForSEO, and visualizes this intelligence in a modern dashboard for developers, marketers, and SaaS analysts.
 
-> Inspired by a growth insight from @iannuttall — this platform helps you spot high-potential Chrome extensions, underserved niches, and SEO opportunities with zero guesswork.
+> Inspired by a growth insight from [@iannuttall](https://x.com/iannuttall/status/1941470870528241795) — this platform helps you spot high-potential Chrome extensions, underserved niches, and SEO opportunities with zero guesswork.
 
 ---
 
 ## 🚀 What’s Done So Far
 
-- ✅ **Project scaffolding** with clear folder structure and environment config  
-- ✅ **Prisma ORM** connected to a Neon-hosted PostgreSQL database  
-- ✅ **Database schema** defined and migrations run (`prisma migrate dev`)  
-- ✅ **Seed script** created and run to load example extension data  
-- ✅ **Express backend API** serving extension data at `/api/extensions`  
-- ✅ **CORS configured** to allow frontend integration  
-- ✅ **Local API server verified returning JSON data**  
-- ✅ **Scraper implemented** using Puppeteer to fetch Chrome Web Store data  
-- ✅ **Scraper tested and fixed for Codespaces/Ubuntu 24.04 compatibility**  
-- ✅ **Scraped data saved to PostgreSQL via Prisma `upsert()` logic**
+- ✅ **Project scaffolding** with modular folder structure, `.env` config, and working Typescript setup  
+- ✅ **PostgreSQL database** via Neon and fully connected through Prisma ORM  
+- ✅ **Database schema** defined and migrated successfully (`prisma migrate dev`)  
+- ✅ **Seed script** created and executed for sample extension data  
+- ✅ **Scraper system** using Puppeteer to extract Chrome Web Store extension data  
+- ✅ **Single URL scraper** tested and validated (via `scrapeExtension.ts`)  
+- ✅ **Batch scraper** implemented using `urls.json` input (`scrapeMultipleExtensions.ts`)  
+- ✅ **Robust upsert logic** with Prisma to avoid duplicate records  
+- ✅ **Scraper tested across multiple Chrome extensions** (✅ 8 verified successful inserts)  
+- ✅ **Express backend** serving extensions via `/api/extensions`  
+- ✅ **API tested and returns clean JSON**  
+- ✅ **CORS configured** and ready for frontend consumption  
+- ✅ **Environment working across GitHub Codespaces + Ubuntu 24.04**
 
 ---
 
-## 🛠️ What’s Next (Step-by-Step Roadmap)
+## 🛠️ What’s Next (Development Roadmap)
 
-### 1. 🌐 Expand Scraper Functionality
+### 1. 🔍 Improve Scraper Accuracy
 
-- Add support for batch scraping from a list of URLs  
-- Implement error handling and retry logic for flaky pages  
-- Optionally: Extract more metadata like changelogs, version history, etc.
+- Improve fallbacks for selectors (installs, ratings, categories, etc.)  
+- Track and log failed or incomplete extractions  
+- (Optional) Add support for changelogs, last update date, version history
 
-### 2. 📊 Integrate DataForSEO API
+### 2. 📊 Enrich Data with DataForSEO
 
-- Connect to DataForSEO to enrich scraped extensions with:  
-  - Keyword search volume  
-  - CPC (Cost-per-click)  
-  - Competition metrics  
-- Save enriched data in the DB (`enrichedData` field)
+- Add support for keyword volume, CPC, and competition  
+- Query based on extension title + keyword list  
+- Save results to a `Json` column in the DB (`enrichedData`)  
+- Build `enrichExtensions.ts` script for batch enrichment
 
-### 3. ⚙️ Extend Backend API
+### 3. ⚙️ Extend API Functionality
 
-- Add endpoints for:  
-  - Filtering/sorting extensions by installs, rating, keyword volume  
-  - Searching by keywords or categories  
-  - Serving enriched data separately  
-- Add pagination for scalability
+- Add search and filter support (by installs, rating, category, keywords, etc.)  
+- Add pagination and sorting support  
+- Create endpoints for `/extensions/enriched`, `/extensions/:id`, and keyword discovery tools
 
 ### 4. 🧑‍🎨 Build Frontend Dashboard
 
-- React + Tailwind app that consumes the API  
-- Visualize key insights: installs, ratings, keyword trends  
-- Allow users to filter, sort, and export data  
-- Responsive design for desktop and mobile
+- React + Tailwind web app  
+- Display sortable, filterable table of extensions  
+- Visualize installs, competition, CPC, and search volume  
+- Add export-to-CSV button  
+- Mobile-first, clean UX
 
-### 5. 🔐 Authentication & User Management (Optional)
+### 5. 🔐 User Authentication (Optional)
 
-- Add login/signup flows for users  
-- Protect Pro-tier features behind auth  
-- Track API usage and rate-limit
+- Add Supabase or Clerk-based login/signup  
+- Protect enrichment + CSV features under Pro plan  
+- Track usage and enforce rate limits per user
 
 ### 6. 💰 Monetization & Deployment
 
-- Finalize Free vs Pro feature sets  
-- Set up CI/CD with Vercel or Fly.io for frontend/backend  
-- Implement payment gateways and subscription plans
+- Define Free vs Pro feature access  
+- Set up Stripe billing for subscriptions  
+- CI/CD deployment with Vercel or Fly.io  
+- Add webhook support for enrichment usage or billing
 
 ---
 
-## 📁 Current Project Structure
+## 📁 Project Structure
 
-```
 intelligensc/
-├── api/          # Express backend API
-├── client/       # React frontend app
-├── data/         # Raw and enriched JSON datasets
-├── prisma/       # Prisma schema & migrations
-├── scripts/      # Seed and utility scripts
-├── scraper/      # Puppeteer scraper
-├── types/        # Shared TypeScript types/interfaces
-├── .env.example  # Template for environment variables
-├── package.json  # Node.js dependencies and scripts
-└── README.md     # This file
-```
+├── api/ # Express backend API
+├── client/ # React frontend (dashboard UI)
+├── data/ # JSON datasets (raw or enriched)
+├── prisma/ # DB schema + migrations
+├── scripts/ # Seeders, enrichers, utility tools
+├── scraper/ # Puppeteer-based scraping logic
+├── types/ # Shared TS types/interfaces
+├── .env.example # Sample environment variable setup
+├── package.json # Root-level dependency and scripts
+└── README.md # This file
+
 
 ---
 
-## ⚙️ Setup Instructions (GitHub Codespaces)
+## ⚙️ Setup Instructions (GitHub Codespaces or Local)
 
 ### Prerequisites
 
-- GitHub Codespaces environment or local dev setup  
-- Node.js & npm installed (already available in Codespaces)
+- GitHub Codespaces or local Node.js 18+ environment  
+- PostgreSQL access (Neon preferred)  
+- DataForSEO credentials
 
 ### Steps
 
-1. Clone repo (done if Codespaces opened here)  
-2. Install dependencies:
+1. **Clone repo** (or open Codespace)  
+2. **Install dependencies**:
 
 ```bash
 npm install
 cd client && npm install && cd ..
-```
 
-3. Duplicate `.env.example` → `.env` and fill in your values:
+Setup .env:
 
-```
-DATABASE_URL=postgresql://youruser:yourpassword@yourdb.neon.tech/dbname?sslmode=require&channel_binding=require
-DATAFORSEO_LOGIN=your_dataforseo_login
-DATAFORSEO_PASSWORD=your_dataforseo_password
-```
+Copy .env.example → .env and fill in:
 
-4. Run database migrations:
+DATABASE_URL=postgresql://<user>:<password>@<host>/<db>?sslmode=require
+DATAFORSEO_LOGIN=your_login
+DATAFORSEO_PASSWORD=your_password
+Run migrations:
 
-```bash
 npx prisma migrate dev --name init
-```
+Seed the database:
 
-5. Seed the database:
-
-```bash
 npx ts-node scripts/seed.ts
-```
+Run the API server:
 
-6. Start the API server:
-
-```bash
 npx ts-node api/server.ts
-```
+Scrape Chrome extensions (batch):
 
-7. Start the frontend (in a separate terminal):
+npx ts-node scraper/scrapeMultipleExtensions.ts
+Start the frontend:
 
-```bash
 cd client
 npm run dev
-```
 
----
+💡 How It Works
+🧠 Scraper: Pulls live metadata from Chrome Web Store using Puppeteer
 
-## 💡 How It Works
+💾 Database: Stores structured extension data in PostgreSQL via Prisma
 
-- **Scraper:** Puppeteer fetches Chrome extension metadata  
-- **Backend:** Stores and serves data, enriches with DataForSEO insights  
-- **Frontend:** Visualizes data for user exploration and analysis
+📡 API Layer: Serves data via RESTful endpoints (/api/extensions)
 
----
+📊 Enrichment (Upcoming): Adds SEO metrics from DataForSEO
 
-## 💼 Monetization Strategy
+🎨 Dashboard (Upcoming): Visual exploration of market opportunities
 
-- **Free tier:** Basic data and filters  
-- **Pro tier:** Full enrichment, trend tracking, CSV exports  
-- **Custom:** Alerts, dashboards for investors and enterprise
+💼 Monetization Strategy
+Tier	Features
+Free	Basic extension data, search, filters
+Pro	Keyword enrichment, CSV export, CPC insights
+Enterprise	Investor dashboards, keyword alerts, tracked verticals
 
----
+🔐 Security Notes
+Never commit .env files — use .gitignore
 
-## 🔐 Security Notes
+Keep DataForSEO credentials secure
 
-- Never commit your real `.env` file or secrets to GitHub  
-- Use `.env.example` for reference  
-- Add `.env` to `.gitignore`
+Use .env.example as a reference template
 
----
+📬 Contact & Contributions
+Made by SchulzCorp
+License: MIT
+Inspired by @iannuttall’s SaaS research insights
 
-## 📬 Contact & Contributions
-Made by SchulzCorp 
-License: MIT  
-Inspired by growth insights from [@iannuttall](https://x.com/iannuttall/status/1941470870528241795)
-
-Feel free to fork and contribute — pull requests welcome!
+Want to contribute? Fork it, run it, and PR your upgrades 🚀
